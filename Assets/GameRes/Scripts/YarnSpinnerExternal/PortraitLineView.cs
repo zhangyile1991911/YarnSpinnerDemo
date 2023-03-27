@@ -145,9 +145,9 @@ public class PortraitLineView : DialogueViewBase
     public override async void RunLine(LocalizedLine dialogueLine,Action onDialogueLineFinished)
     {
         Debug.Log($"开始展示文字");
-        var spName = string.Concat(dialogueLine.CharacterName, "Portrait");
-        var sp = await Resources.LoadAsync<Sprite>(spName);
-        CharacterPortrait.sprite = sp as Sprite;
+        var spName = string.Concat("Assets/Art/Character/Portrait/",dialogueLine.CharacterName, "Portrait.png");
+        var sp = await Addressables.LoadAssetAsync<Sprite>(spName).ToUniTask();
+        CharacterPortrait.sprite = sp;
         cts?.Dispose();
         cts = new CancellationTokenSource();
         await RunLineInternal(dialogueLine,onDialogueLineFinished);

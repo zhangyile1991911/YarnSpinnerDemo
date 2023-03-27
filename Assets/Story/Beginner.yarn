@@ -2,17 +2,17 @@
 tags:
 position: 145,-317
 ---
-LittleGirl: 这里什么时候开了这个店？
-LittleGirl: 老板你这里有什么特色嘛？
--> 没特色 爱吃吃不吃滚;
-    <<jump getaway>>
--> 最近新学的拿手菜是九转大肠,要不要尝尝
-   <<jump justBegin>> 
+<<if $like < 50>>
+<<jump LittleGirlStart>>
+<<else>>
+<<jump LittleGirlLikeStory>>
+<<endif>>
 ===
 
 
+
 title: getaway
-position: -39,55
+position: -89,-105
 ---
 Merchant: 就你逼事多，爱吃不吃，没心情伺候你
 <<LinePunch Line>>
@@ -25,7 +25,7 @@ LittleGirl: 傻逼！
 
 
 title: justBegin
-position: 275,57
+position: 341,-108
 ---
 LittleGirl: 没听过哎。。。
 Merchant: 九转大肠是以猪大肠为主料，加以葱、姜、芫荽等配料，通过煮、烧等烹饪技法制作而成，成菜后有辣觉，并且酸、甜、香、咸四味俱全，色泽红润，质地软嫩。2018年9月10日，“九转大肠”入选“中国菜”中的“山东十大经典名菜”名单。
@@ -33,4 +33,23 @@ Merchant: 最近从电视上学来的,要不要试试看。
 LittleGirl: 听你这么一说，好像很好吃的样子。
 LittleGirl: 给我来一份吧。
 Merchant: 好的，请稍等。
+===
+
+title: LittleGirlStart
+position: -103,-344
+---
+LittleGirl: 这里什么时候开了这个店？
+LittleGirl: 老板你这里有什么特色嘛？
+-> 没特色 爱吃吃不吃滚;
+    <<jump getaway>>
+-> 最近新学的拿手菜是九转大肠,要不要尝尝
+   <<jump justBegin>> 
+===
+
+title: LittleGirlLikeStory
+position: 145,-317
+---
+LittleGirl: 最近工作太忙了。
+Merchant: 确实有一周没见了。
+Merchant: 今天想吃点什么。
 ===

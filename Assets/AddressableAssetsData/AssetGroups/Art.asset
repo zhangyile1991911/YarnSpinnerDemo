@@ -16,7 +16,67 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 152eae0b8aefdbc479445d9f21dc86d7
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 87491b87c0798ff4fa0f71830069c011
+    m_Address: Assets/Art/Character
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5273cbc56c1a7ea488405a8f7b8d2aca
+    m_Address: Assets/Art/Character/Portrait/WomanPortrait.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 423f1c39754b5284c937718a21e9586e
+    m_Address: Assets/Art/Character/Portrait/YoungFatManPortrait.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a148367ff78aab14da6c4ff4826caecc
+    m_Address: Assets/Art/Character/Portrait/MerchantPortrait.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 385896e794338a042bc9505840ee1c71
+    m_Address: Assets/Art/Character/Portrait/FishManPortrait.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b77f79e9cd501624f86b77fbc790c977
+    m_Address: Assets/Art/Character/Portrait/LittleGirlPortrait.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 9c9ac7af15ab6674bbc1756219dc88a3
+    m_Address: Assets/Art/Character/Portrait/LadyPortrait.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e4fb6235922b38b40906df0efeb7809d
+    m_Address: Assets/Art/Character/Portrait/DeliveryManPortrait.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 45f58d973ab511648980ea27fcb8017c
+    m_Address: Assets/Art/Character/Picture/DeliveryMan.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 800defdb3325989498cb45a5a5e08494
+    m_Address: Assets/Art/Character/Picture/LittleGirl.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: fec42964dfacd36428b18d7238531012
+    m_Address: Assets/Art/Character/Picture/Lady.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b2e245951d1889d43b5f410bd3411def
+    m_Address: Assets/Art/Character/Picture/YoungFatMan.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5fe423f81b0db5b4ab95f4de729da821
+    m_Address: Assets/Art/Character/Picture/FishMan.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 528fa83e92e7f99479e75cf547e6651f
+    m_Address: Assets/Art/Character/Picture/Merchant.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e12fd800a149d9f418c7789ccd4062d5
+    m_Address: Assets/Art/Character/Picture/Woman.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 79bcacb4243e11b4d84dcb0d81f5c883, type: 2}
   m_SchemaSet:

@@ -8,13 +8,13 @@ using DG.Tweening;
 public class CustomCommand
 {
     [YarnCommand("LinePunch")]
-    public static void LinePunch(GameObject go)
+    public static void LinePunch(RectTransform go)
     {
-        var rt = go.GetComponent<RectTransform>();
-        if (rt != null)
+        // var rt = go.GetComponent<RectTransform>();
+        if (go != null)
         {
             Debug.Log($"开始播出自定义动画");
-            rt.DOPunchPosition(new Vector3(20,20,1),2.5f,20,1f);    
+            go.DOPunchPosition(new Vector3(20,20,1),2.5f,20,1f);    
         }
     }
 }
