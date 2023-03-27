@@ -1,18 +1,18 @@
 ﻿title: Beginner
 tags:
-position: 145,-317
+position: 208,-624
 ---
 <<if $like < 50>>
 <<jump LittleGirlStart>>
 <<else>>
-<<jump LittleGirlLikeStory>>
+<<jump LittleGirlFriend>>
 <<endif>>
 ===
 
 
 
 title: getaway
-position: -89,-105
+position: -180,-82
 ---
 Merchant: 就你逼事多，爱吃不吃，没心情伺候你
 <<LinePunch Line>>
@@ -25,7 +25,7 @@ LittleGirl: 傻逼！
 
 
 title: justBegin
-position: 341,-108
+position: 114,-71
 ---
 LittleGirl: 没听过哎。。。
 Merchant: 九转大肠是以猪大肠为主料，加以葱、姜、芫荽等配料，通过煮、烧等烹饪技法制作而成，成菜后有辣觉，并且酸、甜、香、咸四味俱全，色泽红润，质地软嫩。2018年9月10日，“九转大肠”入选“中国菜”中的“山东十大经典名菜”名单。
@@ -36,7 +36,7 @@ Merchant: 好的，请稍等。
 ===
 
 title: LittleGirlStart
-position: -103,-344
+position: -32,-403
 ---
 LittleGirl: 这里什么时候开了这个店？
 LittleGirl: 老板你这里有什么特色嘛？
@@ -46,8 +46,8 @@ LittleGirl: 老板你这里有什么特色嘛？
    <<jump justBegin>> 
 ===
 
-title: LittleGirlLikeStory
-position: 145,-317
+title: LittleGirlFriend
+position: 460,-393
 ---
 LittleGirl: 最近工作太忙了。
 Merchant: 确实有一周没见了。
