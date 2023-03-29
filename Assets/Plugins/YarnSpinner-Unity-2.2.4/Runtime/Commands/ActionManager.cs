@@ -112,6 +112,11 @@ namespace Yarn.Unity
             // well, I mean...
             if (targetType == typeof(string)) { return null; }
 
+            if (typeof(GameObject).IsAssignableFrom(targetType))
+            {
+                
+            }
+            
             // find the GameObject.
             if (typeof(GameObject).IsAssignableFrom(targetType))
             {

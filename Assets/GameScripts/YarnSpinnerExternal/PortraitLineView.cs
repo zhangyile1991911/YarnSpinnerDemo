@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
+using Yarn.Markup;
 using Yarn.Unity;
 
 public static class EffectsAsync
@@ -19,7 +20,7 @@ public static class EffectsAsync
         var timeElapse = 0f;
         while (timeElapse < fadeTime)
         {
-            Debug.Log($"进行alpha动画");
+            // Debug.Log($"进行alpha动画");
             // return;
             var faction = timeElapse / fadeTime;
             timeElapse += Time.deltaTime;
@@ -142,14 +143,60 @@ public class PortraitLineView : DialogueViewBase
         
     }
 
-    public override async void RunLine(LocalizedLine dialogueLine,Action onDialogueLineFinished)
+    private void HandleMarkup(List<MarkupAttribute> attributes)
     {
-        Debug.Log($"开始展示文字");
-        var spName = string.Concat("Assets/Art/Character/Portrait/",dialogueLine.CharacterName, "Portrait.png");
+        foreach (var markupAttribute in attributes)
+        {
+            // Debug.Log($"markupAttribute = {markupAttribute} markupAttribute.Name = {markupAttribute.Name}");
+            // foreach (var set in markupAttribute.Properties)
+            // {
+            //     Debug.Log($"key = {set.Key} value = {set.Value}");
+            // }
+            switch (markupAttribute.Name)
+            {
+                case "mood":
+                    MoodAnimation(markupAttribute.Properties);
+                    break;
+                case "character":
+                    LoadPortrait(markupAttribute.Properties);
+                    break;
+            }
+        }
+    }
+
+    private async void LoadPortrait(IReadOnlyDictionary<string,MarkupValue> moods)
+    {
+        if (!moods.ContainsKey("name")) return;
+        var characterName = moods["name"].StringValue;
+        var spName = string.Concat("Assets/Art/Character/Portrait/",characterName, "Portrait.png");
         var sp = await Addressables.LoadAssetAsync<Sprite>(spName).ToUniTask();
         CharacterPortrait.sprite = sp;
+    }
+    
+    private void MoodAnimation(IReadOnlyDictionary<string,MarkupValue> moods)
+    {
+        switch (moods["mood"].StringValue)
+        {
+            case "angry":
+                LineAngryAnimation();
+                break;
+        }
+    }
+    
+    private void LineAngryAnimation()
+    {
+        lineText.rectTransform.DOPunchPosition(new Vector3(20, 20, 1), 2.5f, 20, 1f);
+    }
+
+    public override async void RunLine(LocalizedLine dialogueLine,Action onDialogueLineFinished)
+    {
+        // Debug.Log($"开始展示文字");
+        
         cts?.Dispose();
         cts = new CancellationTokenSource();
+        
+        HandleMarkup(dialogueLine.Text.Attributes);
+
         await RunLineInternal(dialogueLine,onDialogueLineFinished);
     }
 
@@ -200,7 +247,7 @@ public class PortraitLineView : DialogueViewBase
         
         if (useFadeEffect)
         {//演出渐入效果
-            Debug.Log($"演出渐入效果");
+            // Debug.Log($"演出渐入效果");
             await EffectsAsync.FadeAlpha(canvasGroup, 0, 1, fadeInTime,cts);
         }
         
@@ -211,7 +258,7 @@ public class PortraitLineView : DialogueViewBase
             canvasGroup.alpha = 1f;
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
-            Debug.Log($"演出打字机效果");
+            // Debug.Log($"演出打字机效果");
             await EffectsAsync.Typewriter(
                 lineText,
                 typewriterEffectSpeed,
@@ -223,7 +270,7 @@ public class PortraitLineView : DialogueViewBase
     public override void DismissLine(Action onDismissalComplete)
     {
         currentLine = null;
-        Debug.Log($"当前文字展示结束");
+        // Debug.Log($"当前文字展示结束");
         DismissLineInternal(onDismissalComplete);
     }
 
@@ -235,7 +282,7 @@ public class PortraitLineView : DialogueViewBase
 
         if (useFadeEffect)
         {
-            Debug.Log($"当前文字展示渐出效果");
+            // Debug.Log($"当前文字展示渐出效果");
             await EffectsAsync.FadeAlpha(canvasGroup, 1, 0, fadeOutTime,cts);
         }
 
