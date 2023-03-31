@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using System.Xml.Schema;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
@@ -182,10 +180,11 @@ public class PortraitLineView : DialogueViewBase
                 break;
         }
     }
-    
+
+    private Tween lineDoingTween;
     private void LineAngryAnimation()
     {
-        lineText.rectTransform.DOPunchPosition(new Vector3(20, 20, 1), 2.5f, 20, 1f);
+        lineDoingTween = lineText.rectTransform.DOPunchPosition(new Vector3(20, 20, 1), 2.5f, 20, 1f);
     }
 
     public override async void RunLine(LocalizedLine dialogueLine,Action onDialogueLineFinished)
@@ -286,6 +285,12 @@ public class PortraitLineView : DialogueViewBase
             await EffectsAsync.FadeAlpha(canvasGroup, 1, 0, fadeOutTime,cts);
         }
 
+        if (lineDoingTween != null && lineDoingTween.IsPlaying())
+        {
+            lineDoingTween.Kill();
+            lineDoingTween = null;
+        }
+        
         canvasGroup.alpha = 0;
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = interactable;
