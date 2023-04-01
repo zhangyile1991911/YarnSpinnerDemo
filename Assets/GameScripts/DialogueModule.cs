@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Unity.VisualScripting;
@@ -14,13 +15,17 @@ public class DialogueModule : MonoBehaviour
     public DialogueRunner runner;
 
     public Button DialogueStartBtn;
-
+    public Button SkipBtn;
+    public Toggle AutoToggle;
+    public Transform HintNextLine;
     public List<Transform> CharacterNodeList;
 
     public Dictionary<string, GameObject> peoples;
+    
     [Range(0,100f)]
     public float like;
-
+    
+    private PortraitLineView lineView;
     private static DialogueModule _module;
     public static DialogueModule Instance => _module;
     private void Awake()
@@ -33,7 +38,73 @@ public class DialogueModule : MonoBehaviour
     {
         DontDestroyOnLoad(this);
         DialogueStartBtn.onClick.AddListener(StartDialogue);
+        SkipBtn.onClick.AddListener(SkipStory);
+        AutoToggle.onValueChanged.AddListener(SetAutoAdvance);
         runner.VariableStorage.SetValue("$like",like);
+        foreach (var oneView in runner.dialogueViews)
+        {
+            if (oneView.GetType() == typeof(PortraitLineView))
+            {
+                lineView = oneView as PortraitLineView;
+                break;
+            }
+        }
+        
+        HintNextLine.gameObject.SetActive(false);
+
+        if (lineView != null)
+        {
+            lineView.DialogueLineStar += (string textId) =>
+            {
+                HintNextLine.gameObject.SetActive(false);
+                
+            };
+            
+            runner.onDialogueComplete.AddListener(() =>
+            {
+                Debug.Log("onDialogueComplete");
+            });
+            
+            // runner.onNodeComplete += (string str) =>
+            // {
+            //     HintNextLine.gameObject.SetActive(true);
+            // };
+            
+            // var md = runner.yarnProject.lineMetadata.GetMetadata();
+            lineView.DialogueLineComplete += (string textId) =>
+            {
+                HintNextLine.gameObject.SetActive(true);
+                // Debug.Log($"DialogueLineComplete textId = {textId}");
+                // var lm = runner.yarnProject.lineMetadata;
+                // var ids = lm.GetLineIDs();
+                // var strs = lm.GetMetadata(textId);
+                // if (strs != null && strs.Length > 0)
+                // {
+                //     foreach (var one in strs)
+                //     {
+                //         Debug.Log("is last line "+one);    
+                //     }
+                //     
+                // }
+                // Debug.Log($"ids.Count() = {ids.Count()}");
+                // var idEu = ids.GetEnumerator();
+                // Debug.Log($"current = {idEu.Current}");
+                // Debug.Log($"MoveNext = {idEu.MoveNext()}");
+                // HintNextLine.gameObject.SetActive(idEu.Current != null);
+            };    
+        }
+        
+        // runner.onNodeComplete = (string str) =>
+        // {
+        //     if (runner.lineProvider.LinesAvailable)
+        //     {
+        //         HintNextLine.gameObject.SetActive(true);
+        //     }
+        //     else
+        //     {
+        //         HintNextLine.gameObject.SetActive(false);
+        //     }
+        // };
         // runner.AddCommandHandler<RectTransform>("LineShake",LineShake);
     }
 
@@ -45,6 +116,28 @@ public class DialogueModule : MonoBehaviour
     void StartDialogue()
     {
         runner.StartDialogue("Beginner");
+        lineView.autoAdvance = AutoToggle.isOn;
+    }
+
+    void SetAutoAdvance(bool isOn)
+    {
+        lineView.autoAdvance = isOn;
+        if (!lineView.PlayTyping)
+        {
+            lineView.UserRequestedViewAdvancement();
+        }
+    }
+
+    void SkipStory()
+    {
+        // runner.onDialogueComplete;
+        
+        
+    }
+
+    private void Update()
+    {
+        
     }
 
     Transform findNode(string name)
@@ -83,7 +176,7 @@ public class DialogueModule : MonoBehaviour
         var spriteRenderer = trans.GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = characterSp;
         trans.gameObject.SetActive(show);
-        Debug.Log($"LoadActor {show}");
+        // Debug.Log($"LoadActor {show}");
     }
 
     [YarnCommand("ActorFadeIn")]
@@ -96,7 +189,7 @@ public class DialogueModule : MonoBehaviour
         spriteRenderer.color = new Color(1,1,1,0);
         spriteRenderer.DOFade(1, duration);
         actor.gameObject.SetActive(true);
-        Debug.Log($"ActorFadeIn");
+        // Debug.Log($"ActorFadeIn");
     }
     
     [YarnCommand("CharacterFadeOut")]

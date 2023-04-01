@@ -6,6 +6,8 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Yarn.Markup;
 using Yarn.Unity;
@@ -89,8 +91,8 @@ public class PortraitLineView : DialogueViewBase
     [SerializeField]
     internal TextMeshProUGUI lineText = null;
     
-    [SerializeField]
-    internal Button continueButton = null;
+    // [SerializeField]
+    // internal Button continueButton = null;
     
     [SerializeField]
     internal bool useFadeEffect = true;
@@ -103,8 +105,6 @@ public class PortraitLineView : DialogueViewBase
     [Min(0)]
     internal float fadeOutTime = 0.05f;
     
-    
-    
     [SerializeField]
     internal bool useTypewriterEffect = false;
     
@@ -114,20 +114,22 @@ public class PortraitLineView : DialogueViewBase
     [SerializeField]
     [Min(0)]
     internal float typewriterEffectSpeed = 0f;
-    
-    
-    
+
     [SerializeField]
     [Min(0)]
     internal float holdTime = 1f;
     
     [SerializeField]
-    internal bool autoRead = false;
+    internal bool autoAdvance = false;
     
     //用来保存当前正在显示的对话内容
     LocalizedLine currentLine = null;
     private CancellationTokenSource cts;
-    
+
+    public UnityAction<string> DialogueLineComplete;
+    public UnityAction<string> DialogueLineStar;
+
+    public bool PlayTyping => isTyping;
     //是否在演出打字机效果
     private bool isTyping = false;
     private void Awake()
@@ -184,7 +186,14 @@ public class PortraitLineView : DialogueViewBase
     private Tween lineDoingTween;
     private void LineAngryAnimation()
     {
-        lineDoingTween = lineText.rectTransform.DOPunchPosition(new Vector3(20, 20, 1), 2.5f, 20, 1f);
+        if (lineDoingTween == null)
+        {
+            lineDoingTween = lineText.rectTransform.DOPunchPosition(new Vector3(20, 20, 1), 2.5f, 20, 1f);    
+        }
+        else
+        {
+            lineDoingTween.Restart();
+        }
     }
 
     public override async void RunLine(LocalizedLine dialogueLine,Action onDialogueLineFinished)
@@ -203,7 +212,9 @@ public class PortraitLineView : DialogueViewBase
     private async UniTask RunLineInternal(LocalizedLine dialogueLine, Action onDialogueLineFinished)
     {
         currentLine = dialogueLine;
-
+        
+        DialogueLineStar?.Invoke(dialogueLine.TextID);
+        
         //开始文字演出
         await PresentLine(dialogueLine);
         isTyping = false;
@@ -213,6 +224,9 @@ public class PortraitLineView : DialogueViewBase
         
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
+        
+        DialogueLineComplete?.Invoke(dialogueLine.TextID);
+        
         //是否等待
         if (holdTime > 0)
         {
@@ -220,7 +234,7 @@ public class PortraitLineView : DialogueViewBase
         }
         
         //是否自动阅读
-        if (!autoRead)
+        if (!autoAdvance)
         {
             return;
         }
@@ -285,12 +299,8 @@ public class PortraitLineView : DialogueViewBase
             await EffectsAsync.FadeAlpha(canvasGroup, 1, 0, fadeOutTime,cts);
         }
 
-        if (lineDoingTween != null && lineDoingTween.IsPlaying())
-        {
-            lineDoingTween.Kill();
-            lineDoingTween = null;
-        }
-        
+        lineDoingTween?.Pause();
+
         canvasGroup.alpha = 0;
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = interactable;
@@ -299,7 +309,7 @@ public class PortraitLineView : DialogueViewBase
 
     public override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
     {
-        Debug.Log($"当前文字打断");
+        // Debug.Log($"当前文字打断");
         currentLine = dialogueLine;
 
         lineText.gameObject.SetActive(true);
@@ -319,6 +329,7 @@ public class PortraitLineView : DialogueViewBase
         }
         
         cts?.Cancel();
+        cts = null;
         onDialogueLineFinished();
     }
 

@@ -164,7 +164,7 @@ namespace Yarn.Unity
         /// just finished running.
         /// </remarks>
         /// <seealso cref="Dialogue.NodeCompleteHandler"/>
-        public StringUnityEvent onNodeComplete;
+        public Action<string> onNodeComplete;
 
         /// <summary>
         /// A Unity event that is called once the dialogue has completed.
