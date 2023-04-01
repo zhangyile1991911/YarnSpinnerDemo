@@ -9,6 +9,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Yarn;
 using Yarn.Markup;
 using Yarn.Unity;
 
@@ -42,22 +43,20 @@ public static class EffectsAsync
         }
     }
 
-    public static async UniTask Typewriter(TextMeshProUGUI text, float lettersPerSecond, Action onCharacterType,CancellationTokenSource cts)
+    public static async UniTask Typewriter(TextMeshProUGUI text, Func<float> lettersPerSecond, Action onCharacterType,CancellationTokenSource cts)
     {
         // Debug.Log($"开始运行 打字机效果");
         text.maxVisibleCharacters = 0;
         await UniTask.NextFrame(cancellationToken:cts.Token);
 
         var characterCount = text.textInfo.characterCount;
-        if (lettersPerSecond <= 0 || characterCount == 0)
+        if (lettersPerSecond() <= 0 || characterCount == 0)
         {
             text.maxVisibleCharacters = characterCount;
             return;
         }
         
-        float secondsPerLetter = 1.0f / lettersPerSecond;
         // Debug.Log($"每一个字需要 {secondsPerLetter}秒显示");
-        
         var accumulator = Time.deltaTime;
         while (text.maxVisibleCharacters < characterCount)
         {
@@ -65,6 +64,7 @@ public static class EffectsAsync
             {
                 return;
             }
+            float secondsPerLetter = 1.0f / lettersPerSecond();
             while (accumulator >= secondsPerLetter)
             {
                 text.maxVisibleCharacters += 1;
@@ -90,7 +90,9 @@ public class PortraitLineView : DialogueViewBase
     
     [SerializeField]
     internal TextMeshProUGUI lineText = null;
-    
+
+    [SerializeField]
+    internal ButtonLongPress backgroundBtn = null;
     // [SerializeField]
     // internal Button continueButton = null;
     
@@ -114,7 +116,7 @@ public class PortraitLineView : DialogueViewBase
     [SerializeField]
     [Min(0)]
     internal float typewriterEffectSpeed = 0f;
-
+    
     [SerializeField]
     [Min(0)]
     internal float holdTime = 1f;
@@ -128,10 +130,11 @@ public class PortraitLineView : DialogueViewBase
 
     public UnityAction<string> DialogueLineComplete;
     public UnityAction<string> DialogueLineStar;
-
+    
     public bool PlayTyping => isTyping;
     //是否在演出打字机效果
     private bool isTyping = false;
+    
     private void Awake()
     {
         canvasGroup.alpha = 0;
@@ -140,7 +143,7 @@ public class PortraitLineView : DialogueViewBase
 
     private void Start()
     {
-        
+
     }
 
     private void HandleMarkup(List<MarkupAttribute> attributes)
@@ -274,7 +277,7 @@ public class PortraitLineView : DialogueViewBase
             // Debug.Log($"演出打字机效果");
             await EffectsAsync.Typewriter(
                 lineText,
-                typewriterEffectSpeed,
+                ()=>typewriterEffectSpeed,
                 () => onCharacterTyped.Invoke(),
                 cts);
         }
@@ -332,7 +335,7 @@ public class PortraitLineView : DialogueViewBase
         cts = null;
         onDialogueLineFinished();
     }
-
+    
     public override void UserRequestedViewAdvancement()
     {
         if (currentLine == null)

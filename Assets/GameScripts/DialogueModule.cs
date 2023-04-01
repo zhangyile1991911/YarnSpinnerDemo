@@ -16,11 +16,18 @@ public class DialogueModule : MonoBehaviour
 
     public Button DialogueStartBtn;
     public Button SkipBtn;
+    public Button BackgroundBtn;
     public Toggle AutoToggle;
     public Transform HintNextLine;
     public List<Transform> CharacterNodeList;
 
     public Dictionary<string, GameObject> peoples;
+    
+    [Range(0,50f)]
+    public float typewriterEffectSpeed;
+    
+    private float maxTypewriterEffectSpeed;
+    private float originTypeWriterEffectSpeed;
     
     [Range(0,100f)]
     public float like;
@@ -31,12 +38,15 @@ public class DialogueModule : MonoBehaviour
     private void Awake()
     {
         _module = this;
+        maxTypewriterEffectSpeed = typewriterEffectSpeed * 10f;
+        originTypeWriterEffectSpeed = typewriterEffectSpeed;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         DontDestroyOnLoad(this);
+        
         DialogueStartBtn.onClick.AddListener(StartDialogue);
         SkipBtn.onClick.AddListener(SkipStory);
         AutoToggle.onValueChanged.AddListener(SetAutoAdvance);
@@ -117,6 +127,7 @@ public class DialogueModule : MonoBehaviour
     {
         runner.StartDialogue("Beginner");
         lineView.autoAdvance = AutoToggle.isOn;
+        lineView.typewriterEffectSpeed = typewriterEffectSpeed;
     }
 
     void SetAutoAdvance(bool isOn)
@@ -128,11 +139,19 @@ public class DialogueModule : MonoBehaviour
         }
     }
 
+    public void DoubleTypewriterEffectSpeed()
+    {
+        lineView.typewriterEffectSpeed = maxTypewriterEffectSpeed;
+    }
+
+    public void RecoverTypewriterEffectSpeed()
+    {
+        lineView.typewriterEffectSpeed = originTypeWriterEffectSpeed;
+    }
+    
     void SkipStory()
     {
         // runner.onDialogueComplete;
-        
-        
     }
 
     private void Update()
