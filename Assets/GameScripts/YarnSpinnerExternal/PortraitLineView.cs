@@ -42,7 +42,6 @@ public static class EffectsAsync
             canvasGroup.blocksRaycasts = true;
         }
     }
-
     public static async UniTask Typewriter(TextMeshProUGUI text, Func<float> lettersPerSecond, Action onCharacterType,CancellationTokenSource cts)
     {
         // Debug.Log($"开始运行 打字机效果");
@@ -85,8 +84,8 @@ public class PortraitLineView : DialogueViewBase
     [SerializeField]
     internal CanvasGroup canvasGroup;
     
-    [SerializeField]
-    public Image CharacterPortrait;
+    // [SerializeField]
+    // public Image CharacterPortrait;
     
     [SerializeField]
     internal TextMeshProUGUI lineText = null;
@@ -141,11 +140,6 @@ public class PortraitLineView : DialogueViewBase
         canvasGroup.blocksRaycasts = false;
     }
 
-    private void Start()
-    {
-
-    }
-
     private void HandleMarkup(List<MarkupAttribute> attributes)
     {
         foreach (var markupAttribute in attributes)
@@ -160,22 +154,10 @@ public class PortraitLineView : DialogueViewBase
                 case "mood":
                     MoodAnimation(markupAttribute.Properties);
                     break;
-                case "character":
-                    LoadPortrait(markupAttribute.Properties);
-                    break;
             }
         }
     }
 
-    private async void LoadPortrait(IReadOnlyDictionary<string,MarkupValue> moods)
-    {
-        if (!moods.ContainsKey("name")) return;
-        var characterName = moods["name"].StringValue;
-        var spName = string.Concat("Assets/Art/Character/Portrait/",characterName, "Portrait.png");
-        var sp = await Addressables.LoadAssetAsync<Sprite>(spName).ToUniTask();
-        CharacterPortrait.sprite = sp;
-    }
-    
     private void MoodAnimation(IReadOnlyDictionary<string,MarkupValue> moods)
     {
         switch (moods["mood"].StringValue)
