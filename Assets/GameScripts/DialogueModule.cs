@@ -70,11 +70,6 @@ public class DialogueModule : MonoBehaviour
                 
             };
             
-            runner.onDialogueComplete.AddListener(() =>
-            {
-                Debug.Log("onDialogueComplete");
-            });
-            
             // runner.onNodeComplete += (string str) =>
             // {
             //     HintNextLine.gameObject.SetActive(true);
@@ -101,9 +96,11 @@ public class DialogueModule : MonoBehaviour
                 // Debug.Log($"current = {idEu.Current}");
                 // Debug.Log($"MoveNext = {idEu.MoveNext()}");
                 // HintNextLine.gameObject.SetActive(idEu.Current != null);
-            };    
+            };   
         }
-        
+
+        runner.onNodeComplete = s => Debug.Log($"onNodeComplete {s}");
+        runner.onNodeStart.AddListener(s => Debug.Log($"onNodeStar {s}"));;
         // runner.onNodeComplete = (string str) =>
         // {
         //     if (runner.lineProvider.LinesAvailable)

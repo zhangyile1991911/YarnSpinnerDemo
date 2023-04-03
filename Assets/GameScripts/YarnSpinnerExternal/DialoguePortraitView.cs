@@ -10,12 +10,18 @@ using Yarn.Markup;
 
 public class DialoguePortraitView : DialogueViewBase
 {
-    
+    [SerializeField]
     public Image CharacterPortrait;
 
     // private AsyncOperationHandle loadSpriteHandle;
-    private CancellationToken cts;
-    private async void HandleMarkup(List<MarkupAttribute> attributes)
+    // private CancellationToken cts;
+    
+    public override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
+    {
+        HandleMarkup(dialogueLine.Text.Attributes,onDialogueLineFinished);
+    }
+    
+    private void HandleMarkup(List<MarkupAttribute> attributes,Action onDialogueLineFinish)
     {
         foreach (var markupAttribute in attributes)
         {
@@ -37,18 +43,22 @@ public class DialoguePortraitView : DialogueViewBase
             {
                 CharacterPortrait.sprite = sp.Result;
                 CharacterPortrait.gameObject.SetActive(true);
+                onDialogueLineFinish();
             };
         }
     }
-    public override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinish)
-    {
-        HandleMarkup(dialogueLine.Text.Attributes);
-    }
 
-    public override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinish)
-    {
-        CharacterPortrait.sprite = null;
-        CharacterPortrait.gameObject.SetActive(false);
-           
-    }
+    // public override void DismissLine(Action onDismissalComplete)
+    // {
+    //     CharacterPortrait.sprite = null;
+    //     CharacterPortrait.gameObject.SetActive(false);
+    //     onDismissalComplete();
+    // }
+    
+    // public override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinish)
+    // {
+    //     CharacterPortrait.sprite = null;
+    //     CharacterPortrait.gameObject.SetActive(false);
+    //     onDialogueLineFinish();
+    // }
 }
