@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using DG.DemiEditor;
 using UnityEditor;
 using UnityEngine;
 
@@ -89,7 +85,7 @@ public class UIScriptAutoCreateEditorWindow : EditorWindow
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("生成", GUILayout.Width(150), GUILayout.Height(30)))
         {
-            CreateUIClass();
+            Generator(uiRootGo);
         }
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
@@ -98,12 +94,41 @@ public class UIScriptAutoCreateEditorWindow : EditorWindow
         GUILayout.EndArea();
     }
 
-    private void CreateUIClass()
+    private void Generator(GameObject go)
+    {
+        var config = AssetDatabase.LoadAssetAtPath<UIAutoCreateInfoConfig>("Assets/Editor/UIAutoCreateInfoConfig.asset");
+        CreatePrefab(go,config);
+        CreateUIClass(config);
+    }
+    private void CreatePrefab(GameObject gameObject,UIAutoCreateInfoConfig config)
+    {
+        //检查目录
+        if (!Directory.Exists(config.PrefabPath))
+        {
+            throw new System.Exception($"路径{config.PrefabPath} 不存在");
+        }
+
+        var uiName = GetUIName();
+        var localPath = string.Format("{0}/{1}.prefab", config.PrefabPath, uiName);
+        //确保prefab唯一
+        localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
+
+        //创建一个prefab 并且输出日志
+        bool prefabSuccess;
+        PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, localPath, InteractionMode.UserAction, out prefabSuccess);
+        if (prefabSuccess)
+            Debug.Log($"{uiName}.prefab创建成功");
+        else
+            Debug.Log($"{uiName}.prefab创建失败");
+        AssetDatabase.Refresh();
+    }
+    
+    private void CreateUIClass(UIAutoCreateInfoConfig config)
     {
         if (uiRootGo == null) throw new System.Exception("请拖入需要生成的预制体节点");
         string uiName = GetUIName();
 
-        var config = AssetDatabase.LoadAssetAtPath<UIAutoCreateInfoConfig>("Assets/Editor/UIAutoCreateInfoConfig.asset");
+        
         var targetPath = config.ScriptPath;
         CheckTargetPath(targetPath);
         new UIClassAutoCreate().Create(uiName,uiRootGo,config);

@@ -21,6 +21,7 @@ MonoBehaviour:
     typeName: Button
   - prefixName: Input_
     typeName: InputField
-  TemplatePath: Assets/Editor/UITemplateCode/UIClassTemplate.txt
+  UIViewTemplatePath: Assets/Editor/UITemplateCode/UIViewClassTemplate.txt
+  UIControlTemplatePath: Assets/Editor/UITemplateCode/UIControlClassTemplate.txt
   ScriptPath: Assets/GameScripts/UIScripts/
   PrefabPath: Assets/GameRes/Prefabs/
