@@ -58,6 +58,12 @@ public class UIClassAutoCreate
         //替换find代码
         templateFile = templateFile.Replace("{2}",allFindCode.ToString());
 
+        var enumClassName = $"UIEnum.{uiClassName}";
+        templateFile = templateFile.Replace("{3}",enumClassName);
+
+        var prefabResPath = $"{config.PrefabPath}{uiClassName}.prefab";
+        templateFile = templateFile.Replace("{4}",prefabResPath);
+
         string uiVIewFilePath = string.Format("{0}{1}View.cs", config.ScriptPath,uiClassName);
         if (File.Exists(uiVIewFilePath))
         {

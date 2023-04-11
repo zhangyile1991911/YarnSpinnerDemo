@@ -6,11 +6,14 @@ using UnityEngine.UI;
 /// <summary>
 /// Auto Generate Class!!!
 /// </summary>
-public partial class {0} : IUIView
+[UI((int){3},"{4}")]
+public partial class {0} : UIWindow
 {
 {1}
-	public void Init(GameObject go)
+	public override void Init(GameObject go)
 	{
+	    uiGo = go;
+	    
 {2}
 	}
 }

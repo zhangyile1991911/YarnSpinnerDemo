@@ -6,15 +6,18 @@ using UnityEngine.UI;
 /// <summary>
 /// Auto Generate Class!!!
 /// </summary>
-public partial class LoginWindow
+[UI((int)UIEnum.LoginWindow,"Assets/GameRes/Prefabs/LoginWindow.prefab")]
+public partial class LoginWindow : UIWindow
 {
 	public Image Img_bg;
 	public InputField Input_account;
 	public InputField Input_passwd;
 	public Button Btn_login;
 
-	public void Init(GameObject go)
+	public override void Init(GameObject go)
 	{
+	    uiGo = go;
+	    
 		Img_bg = go.transform.Find("Img_bg").GetComponent<Image>();
 		Input_account = go.transform.Find("Input_account").GetComponent<InputField>();
 		Input_passwd = go.transform.Find("Input_passwd").GetComponent<InputField>();
