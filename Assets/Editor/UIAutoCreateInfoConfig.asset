@@ -20,7 +20,7 @@ MonoBehaviour:
   - prefixName: Btn_
     typeName: Button
   - prefixName: Input_
-    typeName: InputField
+    typeName: TMP_InputField
   UIViewTemplatePath: Assets/Editor/UITemplateCode/UIViewClassTemplate.txt
   UIControlTemplatePath: Assets/Editor/UITemplateCode/UIControlClassTemplate.txt
   ScriptPath: Assets/GameScripts/UIScripts/

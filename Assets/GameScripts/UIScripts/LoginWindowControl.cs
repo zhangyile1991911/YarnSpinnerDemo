@@ -15,26 +15,28 @@ public partial class LoginWindow : UIWindow
 
     public override void OnCreate()
     {
-        
+        Debug.Log("LoginWindow::OnCreate");
     }
     
     public override void OnDestroy()
     {
-        
+        Debug.Log("LoginWindow::OnDestroy");
     }
     
     public override void OnShow(UIOpenParam openParam)
     {
-        base.OnShow(openParam);   
+        base.OnShow(openParam);
+        Debug.Log("LoginWindow::OnShow");
     }
 
     public override void OnHide()
     {
         base.OnHide();
+        Debug.Log("LoginWindow::OnHide");
     }
 
     public override void OnUpdate()
     {
-        
+        Debug.Log("LoginWindow::OnUpdate");
     }
 }
